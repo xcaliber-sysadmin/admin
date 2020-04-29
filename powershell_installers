@@ -1,0 +1,43 @@
+
+#!ps
+#maxlength=50000
+#timeout=300000
+powershell -command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/Maliek/CylanceProtect-Windows-Deployment-Azure-ARM/master/CylanceProtect_x64.msi' -OutFile c:\temp\CylancePROTECT_x64.msi"
+
+(Start-Process "msiexec.exe" -ArgumentList "/i c:\temp\cylanceprotect_x64.msi PIDKEY=cZq1H0bj2RK67197mUDunbjQ LAUNCHAPP=1 REGWSC=1 REBOOT=ReallySuppress /l*v C:\Windows\Temp\CylancePROTECT_Install.log" /qn -NoNewWindow -Wait -PassThru).ExitCode)
+
+del c:\temp\CylancePROTECT_x64.msi
+
+
+#!ps
+#maxlength=50000
+#timeout=300000
+powershell -command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/Maliek/CylanceProtect-Windows-Deployment-Azure-ARM/master/CylanceOPTICSSetup.exe' -OutFile C:\CylanceOPTICSSetup.exe"
+
+Start-Process -FilePath "C:\CylanceOPTICSSetup.exe" -ArgumentList ('/q', '/i', '/n', '/l*v C:\CylanceOPTICS_Install.log') -Wait -Passthru
+
+del C:\CylanceOPTICSSetup.exe
+
+#!ps
+#maxlength=50000
+#timeout=300000
+powershell -command "Invoke-WebRequest -Uri 'https://console.automox.com/Automox_Installer-latest.msi' -OutFile c:\Automox_Installer-latest.msi"
+
+(Start-Process "msiexec.exe" -ArgumentList "/i c:\Automox_Installer-latest.msi /qn /norestart ACCESSKEY=b9b2366a-54e5-4c24-ab33-44c39e0e94ff" -NoNewWindow -Wait -PassThru).ExitCode
+
+del c:\Automox_Installer-latest.msi
+
+
+-------------------
+
+curl -sS https://console.automox.com/downloadInstaller?accesskey=b9b2366a-54e5-4c24-ab33-44c39e0e94ff | sudo bash
+launchctl load /Library/LaunchDaemons/com.automox.agent.plist
+
+
+#!ps
+#maxlength=50000
+#timeout=300000
+
+(Start-Process "msiexec.exe" -ArgumentList "/i c:\ATAcct585611.msi /qn /norestart" -NoNewWindow -Wait -PassThru).ExitCode
+
+del c:\ATAcct585611.msi
